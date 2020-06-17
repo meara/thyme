@@ -3,18 +3,22 @@ class RecipesController < ApplicationController
     @recipes = Recipe.all
   end
 
-  # def show
-  # end
+  def show
+    @recipe = Recipe.find(params[:id])
+  end
 
-  # def new
-  # end
+  def new
+  end
 
-  # def create
-  # end
+  def create
+  end
 
-  # def edit
-  # end
+  def edit
+  end
 
-  # def update
+  def update
+  end
+
+  # def destroy
   # end
 end

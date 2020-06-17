@@ -1,5 +1,10 @@
 %h1.title Recipes
 
+.button= link_to("Add New Recipe", new_recipe_path)
+
+%br
+%br
+
 %ul
   - @recipes.each do |recipe|
-    %li= recipe.name
+    %li= link_to(recipe.name, recipe_path(recipe))
