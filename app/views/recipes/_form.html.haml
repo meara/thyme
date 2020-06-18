@@ -1,1 +1,4 @@
-_form.html.haml
+= simple_form_for @recipe do |f|
+  = f.input :name
+  = f.input :link
+  = f.button :submit
