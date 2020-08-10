@@ -1,7 +1,10 @@
-= @recipe.name
-= @recipe.link
+%section.section
+  .container
+    %div
+      = @recipe.name
+      = @recipe.link
 
-%br
-
-= link_to "Edit Recipe", edit_recipe_path(@recipe)
-= link_to "Delete", @recipe, method: :delete
+    %div
+      = link_to "Edit Recipe", edit_recipe_path(@recipe)
+    %div
+      = link_to "Delete", @recipe, method: :delete

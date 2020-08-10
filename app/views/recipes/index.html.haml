@@ -1,10 +1,12 @@
-%h1.title Recipes
+%section.section
+  .container
+    .columns
+      .column.is-four-fifths
+        %h1.title.has-text-primary Recipes
+        %table.table.is-striped.is-fullwidth
+          - @recipes.each do |recipe|
+            %tr
+              %td= link_to(recipe.name, recipe_path(recipe))
 
-.button= link_to("Add New Recipe", new_recipe_path)
-
-%br
-%br
-
-%ul
-  - @recipes.each do |recipe|
-    %li= link_to(recipe.name, recipe_path(recipe))
+      .column.is-one-fifth
+        .button= link_to("Add New Recipe", new_recipe_path)

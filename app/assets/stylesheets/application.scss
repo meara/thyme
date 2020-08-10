@@ -14,5 +14,14 @@
  *= require_self
  */
 
-
+@import "0-variables/colors";
 @import 'bulma/bulma';
+
+.navbar-item img {
+    max-height: 4rem;
+}
+
+// .input {
+//   padding: 0 1rem;
+//   min-height: 3rem;
+// }

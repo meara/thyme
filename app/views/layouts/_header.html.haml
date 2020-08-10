@@ -1,0 +1,11 @@
+%header.header
+  %nav.navbar.is-spaced.margin-b-none
+    .container
+      .navbar-brand
+        = link_to root_path, class: "navbar-item" do
+          = image_tag("Thyme.png")
+          %h1.title.is-dark-green.has-text-primary Thyme
+      .navbar-menu.is-active
+        .navbar-start
+          =# link_to "Recipes",recipes_path, class: "navbar-item is-dark-green"
+        .navbar-end
