@@ -1,4 +1,4 @@
-class ApplicationPolicy
+class RecipePolicy < ApplicationPolicy
   attr_reader :user, :record
 
   def initialize(user, record)
@@ -36,7 +36,7 @@ class ApplicationPolicy
     user.present?
   end
 
-  class Scope
+  class Scope < Scope
     attr_reader :user, :scope
 
     def initialize(user, scope)

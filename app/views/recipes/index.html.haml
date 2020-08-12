@@ -9,4 +9,5 @@
               %td= link_to(recipe.name, recipe_path(recipe))
 
       .column.is-one-fifth
-        .button= link_to("Add New Recipe", new_recipe_path)
+        - if policy(:recipe).create?
+          .button= link_to("Add New Recipe", new_recipe_path)
