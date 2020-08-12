@@ -1,18 +1,22 @@
 class RecipesController < ApplicationController
   def index
-    @recipes = Recipe.all
+    @recipes = policy_scope(Recipe)
+    authorize Recipe
   end
 
   def show
     @recipe = Recipe.find(params[:id])
+    authorize @recipe
   end
 
   def new
     @recipe = Recipe.new
+    authorize @recipe
   end
 
   def create
     @recipe = Recipe.new(recipe_params)
+    authorize @recipe
 
     if @recipe.save
       flash[:notice] = "Recipe saved!"
@@ -25,10 +29,12 @@ class RecipesController < ApplicationController
 
   def edit
     @recipe = Recipe.find(params[:id])
+    authorize @recipe
   end
 
   def update
     @recipe = Recipe.find(params[:id])
+    authorize @recipe
 
     if @recipe.update(recipe_params)
       flash[:notice] = "Recipe saved!"
@@ -41,6 +47,7 @@ class RecipesController < ApplicationController
 
   def destroy
     @recipe = Recipe.find(params[:id])
+    authorize @recipe
 
     if @recipe.destroy
       flash[:notice] = "Recipe deleted"
