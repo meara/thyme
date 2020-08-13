@@ -54,18 +54,18 @@ jobs:
           paths:
             - .
 
-  check_db_seeds:
-    executor: my_executor
-    steps:
-      - attach_workspace:
-          at: ~/tmp
-      - tablexi/wait_for_db:
-          executor: my_executor
+  # check_db_seeds:
+  #   executor: my_executor
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/tmp
+  #     - tablexi/wait_for_db:
+  #         executor: my_executor
 
-      # Setup DB
-      - run: bundle exec rake db:create
-      - run: bundle exec rake db:schema:load
-      - run: bundle exec rake db:seed
+  #     # Setup DB
+  #     - run: bundle exec rake db:create
+  #     - run: bundle exec rake db:schema:load
+  #     - run: bundle exec rake db:seed
 
   standardrb:
     executor: my_executor
