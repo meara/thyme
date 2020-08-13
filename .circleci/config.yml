@@ -138,6 +138,6 @@ workflows:
       #     requires:
       #       - bundle
 
-      - check_db_seeds:
-          requires:
-            - bundle
+      # - check_db_seeds:
+      #     requires:
+      #       - bundle
