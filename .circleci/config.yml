@@ -81,6 +81,19 @@ jobs:
           at: ~/tmp
       - run: bundle exec haml-lint --config .haml-lint.yml app/views/
 
+  yarn:
+      executor: my_executor
+      steps:
+      - attach_workspace:
+          at: ~/tmp
+
+      - run: yarn
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
   rspec:
     executor: my_executor
     steps:
@@ -114,6 +127,10 @@ workflows:
       - bundle
 
       - standardrb:
+          requires:
+            - bundle
+
+      - yarn:
           requires:
             - bundle
 
