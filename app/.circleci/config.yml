@@ -1,0 +1,143 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
+executors:
+  my_executor:
+    working_directory: ~/tmp
+    docker:
+      - image: circleci/ruby:2.7.1-node
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: thyme
+          RAILS_ENV: test
+          SELENIUM_DRIVER_URL: http://localhost:4444/wd/hub
+          BUNDLE_PATH: ~/tmp/vendor/bundle
+          BUNDLE_APP_CONFIG: ~/tmp/vendor/bundle
+          GEM_HOME: /home/circleci/tmp/vendor/bundle # NOTE: MUST be full path
+          BUNDLER_VERSION: 2.1.4
+      - image: circleci/postgres:12.3
+        environment:
+          POSTGRES_DB: thyme_test
+          POSTGRES_PASSWORD: ""
+          POSTGRES_USER: thyme
+          POSTGRES_HOST_AUTH_METHOD: trust
+      # - image: selenium/standalone-chrome:latest
+      # - image: redis:3.2
+
+jobs:
+  bundle:
+    executor: my_executor
+    steps:
+      - checkout
+
+      # - run: cp config/secrets.yml.template config/secrets.yml
+      - run: cp config/database.yml.template config/database.yml
+
+      - restore_cache:
+          keys:
+            - gem-cache-{{ arch }}--{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+
+      - run: mkdir -p `echo $GEM_HOME`
+       # Install bundler 2
+      - run: gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+
+      - run: bundle install --without=development --jobs=4 --retry=3
+
+      - save_cache:
+          key: gem-cache-{{ arch }}--{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/tmp/vendor/bundle
+
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  check_db_seeds:
+    executor: my_executor
+    steps:
+      - attach_workspace:
+          at: ~/tmp
+      - tablexi/wait_for_db:
+          executor: my_executor
+
+      # Setup DB
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+      - run: bundle exec rake db:seed
+
+  standardrb:
+    executor: my_executor
+    steps:
+      - attach_workspace:
+          at: ~/tmp
+      - run: bundle exec standardrb
+
+  haml_lint:
+    executor: my_executor
+    steps:
+      - attach_workspace:
+          at: ~/tmp
+      - run: bundle exec haml-lint --config .haml-lint.yml app/views/
+
+  rspec:
+    executor: my_executor
+    steps:
+      - attach_workspace:
+          at: ~/tmp
+
+      - run:
+          name: Wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 2m
+
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+
+      - run:
+          shell: /bin/bash -eo pipefail -O globstar
+          name: rspec
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out /tmp/test-results/rspec.xml \
+                              --format documentation \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+      - store_test_results:
+          path: /tmp/test-results
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - bundle
+
+      - standardrb:
+          requires:
+            - bundle
+
+      # - tablexi/bundle_audit:
+      #     executor:
+      #       name: my_executor
+      #     requires:
+      #       - bundle
+
+      - haml_lint:
+          requires:
+            - bundle
+
+      - rspec:
+          requires:
+            - bundle
+            - yarn
+
+      # - tablexi/check_db_schema:
+      #     executor:
+      #       name: my_executor
+      #     requires:
+      #       - bundle
+
+      - check_db_seeds:
+          requires:
+            - bundle
