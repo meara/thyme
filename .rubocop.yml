@@ -1,0 +1,38 @@
+# this config exists ONLY for haml-lint configuration overrides
+# actual linting of ruby should be done by standardrb
+
+Style/StringLiterals:
+  Enabled: false
+  # TODO: it's not respecting the double quotes style for some reason??
+  # just turned it off for now, but maybe worth rabbit-holing at some point
+  EnforcedStyle: double_quotes
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: false
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: false
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: false
+Lint/MixedRegexpCaptureTypes:
+  Enabled: false
+Lint/RaiseException:
+  Enabled: false
+Lint/StructNewOverride:
+  Enabled: false
+Style/ExponentialNotation:
+  Enabled: false
+Style/HashEachMethods:
+  Enabled: false
+Style/HashTransformKeys:
+  Enabled: false
+Style/HashTransformValues:
+  Enabled: false
+Style/RedundantRegexpCharacterClass:
+  Enabled: false
+Style/RedundantRegexpEscape:
+  Enabled: false
+Style/SlicingWithRange:
+  Enabled: false

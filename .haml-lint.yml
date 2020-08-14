@@ -1,0 +1,17 @@
+linters:
+  SpaceInsideHashAttributes:
+    enabled: true
+    style: no_space
+
+  LineLength:
+    max: 160
+
+  ViewLength:
+    max: 1000
+
+  InlineStyles:
+    exclude: app/views/**_mailer/*
+
+exclude:
+  - "vendor/**/*"
+  - "app/views/devise/**/*"
