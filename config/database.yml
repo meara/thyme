@@ -83,3 +83,5 @@ production:
   database: thyme_production
   username: thyme
   password: <%= ENV['THYME_DATABASE_PASSWORD'] %>
+  url:  <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV["DB_POOL"] || ENV['RAILS_MAX_THREADS'] || 5 %>
