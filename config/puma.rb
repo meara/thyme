@@ -46,3 +46,6 @@ plugin :tmp_restart
 
 # TODO: figure out if I need rack timeout or if this got incorporated to newer ruby/rails versions
 # https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#timeout
+
+# TODO: do I need to spin up a worker in the Procfile for jobs?
+# https://devcenter.heroku.com/articles/procfile#scaling-a-process-type
